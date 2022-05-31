@@ -77,6 +77,62 @@ void selectionSort(int *v, int len)
     }
 }
 
+void insertionSort(int *v, int len)
+{
+    int i, j, min_index;
+    for (i = 0; i < len - 1; i++)
+    {
+        min_index = i;
+        for (j = i + 1; j < len; j++)
+        {
+            if (v[j] < v[min_index])
+            {
+                min_index = j;
+            }
+        }
+        if (min_index != i)
+        {
+            swap(i, min_index, v);
+        }
+    }
+}
+
+int partition(int *v, int low, int high)
+{
+    int pivot_index = high;
+    int k = low;
+    int i;
+    for (i = low; i < high; i++)
+    {
+        if (v[i] <= v[pivot_index])
+        {
+            swap(i, k, v);
+            k++;
+        }
+    }
+    if (v[k] > v[pivot_index])
+    {
+        swap(k, pivot_index, v);
+        return k;
+    }
+    return pivot_index;
+}
+
+void quickSort(int *v, int low, int high)
+{
+    if (low < high)
+    {
+        int pivot_index = partition(v, low, high);
+        // printf("pivot_index = %d", pivot_index);
+        quickSort(v, low, pivot_index - 1);
+        quickSort(v, pivot_index + 1, high);
+    }
+}
+void quickSortStart(int *v, int lenght)
+{
+    quickSort(v, 0, lenght - 1);
+}
+
 int main(int argc, char *argv[])
 {
     int lenght;
@@ -95,7 +151,9 @@ int main(int argc, char *argv[])
     printf("----------RAW ARRAY----------\n");
     printArray(v, lenght);
     // bubbleSort(v, lenght);
-    selectionSort(v, lenght);
+    // selectionSort(v, lenght);
+    insertionSort(v, lenght);
+    // quickSortStart(v, lenght);
     printf("---------- ORDED----------\n");
 
     printArray(v, lenght);
