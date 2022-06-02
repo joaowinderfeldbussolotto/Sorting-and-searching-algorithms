@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #define LEN 10
-#define MAX 100
+#define MAX 1000
 
 int *generateRandomArray(int len)
 {
@@ -133,27 +133,81 @@ void quickSortStart(int *v, int lenght)
     quickSort(v, 0, lenght - 1);
 }
 
-int main(int argc, char *argv[])
-{
-    int lenght;
+
+void toggle(int *v, int start, int mid, int end){
+    int size = end - start + 1;
+    int *aux = (int*)malloc(sizeof(int) * size);
+    int i = start;
+    int j = mid+1;
+    int k = 0;
+    while(i <= mid && j <=end){
+        if(v[i]<= v[j]){
+            aux[k] = v[i];
+            i++;
+        }
+        else{
+            aux[k] = v[j];
+            j++;
+        }
+        k++;
+    }
+
+    while(i <= mid){
+        aux[k] = v[i];
+        k++;
+        i++;
+    }
+
+    while(j <= end){
+        aux[k] = v[j];
+        k++;
+        j++;
+    }
+
+    for(k = start; k <= end; k++){
+       v[k]= aux[k-start];
+    }
+    free(aux);
+}
+void mergeSort(int *v, int start, int end){
+    if(start < end){
+        int mid = (start+end)/2;
+        mergeSort(v, start, mid);
+        mergeSort(v, mid+1, end);
+        toggle(v, start, mid, end);
+    }
+}
+void mergeSortStart(int *v, int lenght){
+    mergeSort(v, 0, lenght-1);
+}
+
+int getLenghtFromTerminal(int argc, char *argv[]){
     if (argc > 1)
     {
         char *charNum = argv[1];
-        lenght = atoi(*(argv + 1));
+         return atoi(*(argv + 1));
     }
     else
     {
-        lenght = LEN;
+        return LEN;
     }
+}
+
+int main(int argc, char *argv[])
+{
+    int lenght = getLenghtFromTerminal(argc, argv);
+    
 
     int *v = generateRandomArray(lenght);
 
     printf("----------RAW ARRAY----------\n");
     printArray(v, lenght);
+    mergeSortStart(v, lenght);
+
     // bubbleSort(v, lenght);
     // selectionSort(v, lenght);
-    insertionSort(v, lenght);
-    // quickSortStart(v, lenght);
+    //insertionSort(v, lenght);
+    //quickSortStart(v, lenght);
     printf("---------- ORDED----------\n");
 
     printArray(v, lenght);
